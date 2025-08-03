@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="title">AI Video Generator</h1>
+        </header>
+        
+        <main class="form-container">
+            <form id="videoForm" class="video-form">
+                <div class="input-group">
+                    <label for="videoTopic" class="input-label">輸入你的影片主題</label>
+                    <textarea 
+                        id="videoTopic" 
+                        name="videoTopic" 
+                        class="topic-input" 
+                        placeholder="請描述你想要生成的影片內容..."
+                        rows="4"
+                        required
+                    ></textarea>
+                </div>
+                
+                <div class="select-group">
+                    <div class="select-item">
+                        <label for="videoStyle" class="select-label">影片風格</label>
+                        <select id="videoStyle" name="videoStyle" class="style-select" required>
+                            <option value="">請選擇風格</option>
+                            <option value="科幻">科幻</option>
+                            <option value="奇幻">奇幻</option>
+                            <option value="動漫">動漫</option>
+                            <option value="寫實">寫實</option>
+                        </select>
+                    </div>
+                    
+                    <div class="select-item">
+                        <label for="videoDuration" class="select-label">影片長度</label>
+                        <select id="videoDuration" name="videoDuration" class="duration-select" required>
+                            <option value="">請選擇長度</option>
+                            <option value="15秒">15 秒</option>
+                            <option value="30秒">30 秒</option>
+                            <option value="60秒">60 秒</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="generate-btn" id="generateBtn">
+                    <span class="btn-text">生成影片</span>
+                    <div class="btn-loader" style="display: none;">
+                        <div class="spinner"></div>
+                        <span>生成中...</span>
+                    </div>
+                </button>
+            </form>
+            
+            <div class="result-container" id="resultContainer" style="display: none;">
+                <h3>Generation Result</h3>
+                <pre id="resultData"></pre>
+            </div>
+        </main>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
