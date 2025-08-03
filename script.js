@@ -21,8 +21,7 @@ const API_ENDPOINT = 'https://ai-video-generator-server.vercel.app/generate';
 async function sendToBackend(data) {
     try {
         console.log('Preparing to send data to backend:', data);
-        
-        // Send POST request to the backend server
+
         const response = await fetch(API_ENDPOINT, {
             method: 'POST',
             headers: {
@@ -30,7 +29,12 @@ async function sendToBackend(data) {
             },
             body: JSON.stringify(data)
         });
-        
+
+        if (response.status === 429) {
+            alert("Too many requests! Please wait a moment and try again.");
+            return { success: false, error: "Too many requests" };
+        }
+
         if (response.ok) {
             const result = await response.json();
             console.log('Backend response:', result);
