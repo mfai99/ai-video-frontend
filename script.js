@@ -28,7 +28,7 @@ async function sendToBackend(data) {
             videoId: 'demo_' + Date.now(),
             status: 'processing',
             estimatedTime: '5-10 minutes',
-            webhook: 'https://hook.us1.make.com/your-webhook-url',
+            webhook: 'https://hook.eu2.make.com/pjvxygrwnhq69w79t7l2wvama6qdkk8i',
             data: data
         };
         
@@ -103,7 +103,7 @@ function validateFormData(formData) {
 }
 
 /**
- * 收集表單數據
+ * Collect form data
  */
 function collectFormData() {
     return {
@@ -115,46 +115,46 @@ function collectFormData() {
 }
 
 /**
- * 處理表單提交
- * @param {Event} event - 表單提交事件
+ * Handle form submission
+ * @param {Event} event - Form submit event
  */
 async function handleFormSubmit(event) {
     event.preventDefault();
     
-    // 收集表單數據
+    // Collect form data
     const formData = collectFormData();
     
-    // 驗證數據
+    // Validate data
     const validation = validateFormData(formData);
     if (!validation.isValid) {
         showResult({ error: validation.errors.join(', ') }, false);
         return;
     }
     
-    // 顯示加載狀態
+    // Show loading state
     showLoading();
     
     try {
-        // 發送數據到後端
+        // Send data to backend
         const result = await sendToBackend(formData);
         
         if (result.success) {
-            // 保存影片請求到localStorage
+            // Save video request to localStorage
             saveVideoRequest(formData, result.data);
             showResult(result.data, true);
         } else {
             showResult(result, false);
         }
     } catch (error) {
-        showResult({ error: '網路連接錯誤，請稍後再試' }, false);
+        showResult({ error: 'Network connection error, please try again later' }, false);
     } finally {
-        // 隱藏加載狀態
+        // Hide loading state
         hideLoading();
     }
 }
 
 /**
- * 保存影片請求到localStorage
+ * Save video request to localStorage
  */
 function saveVideoRequest(formData, responseData) {
     try {
@@ -162,42 +162,42 @@ function saveVideoRequest(formData, responseData) {
             id: responseData.videoId || 'video_' + Date.now(),
             topic: formData.topic,
             status: 'processing',
-            estimatedTime: responseData.estimatedTime || '5-10分鐘',
+            estimatedTime: responseData.estimatedTime || '5-10 minutes',
             style: formData.style,
             duration: formData.duration,
             submittedAt: Date.now(),
             webhook: responseData.webhook
         };
         
-        // 獲取現有的影片列表
+        // Get existing video list
         const savedVideos = localStorage.getItem('myVideos');
         const videos = savedVideos ? JSON.parse(savedVideos) : [];
         
-        // 添加新的影片請求
-        videos.unshift(videoRequest); // 使用unshift讓最新的在前面
+        // Add new video request
+        videos.unshift(videoRequest); // Use unshift to put the newest at the front
         
-        // 限制最多保存50個請求
+        // Limit to saving 50 requests
         if (videos.length > 50) {
             videos.splice(50);
         }
         
-        // 保存回localStorage
+        // Save back to localStorage
         localStorage.setItem('myVideos', JSON.stringify(videos));
         
-        console.log('影片請求已保存:', videoRequest);
+        console.log('Video request saved:', videoRequest);
     } catch (error) {
-        console.error('保存影片請求失敗:', error);
+        console.error('Failed to save video request:', error);
     }
 }
 
 /**
- * 初始化應用程式
+ * Initialize application
  */
 function initializeApp() {
-    // 綁定表單提交事件
+    // Bind form submit event
     videoForm.addEventListener('submit', handleFormSubmit);
     
-    // 添加即時驗證
+    // Add real-time validation
     const inputs = videoForm.querySelectorAll('input, select');
     inputs.forEach(input => {
         input.addEventListener('blur', function() {
@@ -215,7 +215,7 @@ function initializeApp() {
         });
     });
     
-    // 添加鍵盤快捷鍵支援
+    // Add keyboard shortcut support
     document.addEventListener('keydown', function(event) {
         if (event.ctrlKey && event.key === 'Enter') {
             event.preventDefault();
@@ -225,17 +225,17 @@ function initializeApp() {
         }
     });
     
-    console.log('AI Video Factory 應用程式已初始化');
+    console.log('AI Video Factory app initialized');
 }
 
-// 當 DOM 載入完成時初始化應用程式
+// Initialize app when DOM is loaded
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeApp);
 } else {
     initializeApp();
 }
 
-// 導出函數供外部使用
+// Export functions for external use
 window.VideoGenerator = {
     sendToBackend,
     collectFormData,
